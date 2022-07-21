@@ -24,6 +24,8 @@
 import type { Pokemon } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
+import Swal from "sweetalert2";
+
 import { PokemonCard } from "@/components";
 import { getPokemons } from "@/services";
 import { POKEMON_LIMIT } from "@/config/constants";
@@ -46,6 +48,12 @@ const loadPokemons = async () => {
     params.offset += params.limit;
   } catch (error) {
     console.error(error);
+
+    await Swal.fire({
+      title: "Mmmmm... something went wrong",
+      text: "Try it again later",
+      icon: "error",
+    });
   }
 
   isLoading.value = false;

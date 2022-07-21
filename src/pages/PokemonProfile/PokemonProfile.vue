@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="pokemon">
-    <button class="go-back-btn" type="button" @click="router.push('/')">Go Back</button>
+    <button class="go-back-btn" type="button" @click="goBack">Go Back</button>
 
     <div class="profile__container fadeIn">
       <img :src="pokemonImage" width="250px" height="250px" />
@@ -68,6 +68,7 @@ import type { Pokedex } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 import { Badget, Stat, MoveTable } from "@/components";
 import { getPokemonByName } from "@/services";
@@ -76,6 +77,10 @@ import { getOficialArtwork } from "@/utils";
 const router = useRouter();
 const { params } = useRoute();
 const pokemon = ref<Pokedex>();
+
+const goBack = () => {
+  router.push("/");
+};
 
 const pokemonImage = computed(() => {
   return pokemon.value ? getOficialArtwork(pokemon.value.sprites.front_default) : "";
@@ -89,6 +94,14 @@ const getPokemon = async () => {
     pokemon.value = response;
   } catch (error) {
     console.error(error);
+
+    await Swal.fire({
+      title: "Mmmmm... something went wrong",
+      text: "Try it again later",
+      icon: "error",
+    });
+
+    goBack();
   }
 };
 

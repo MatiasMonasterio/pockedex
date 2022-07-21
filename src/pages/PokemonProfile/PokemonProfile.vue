@@ -12,7 +12,7 @@
 
           <div class="profile__types">
             <template v-for="pokemonType in pokemon.types" :key="pokemonType.slot">
-              <Badget>{{ pokemonType.type.name }}</Badget>
+              <Badget :type="pokemonType.type.name">{{ pokemonType.type.name }}</Badget>
             </template>
           </div>
         </div>

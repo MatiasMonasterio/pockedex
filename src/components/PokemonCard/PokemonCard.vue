@@ -1,17 +1,23 @@
 <template>
-  <router-link :to="`/${props.name}`" class="pokemon-card fadeIn" v-if="pokemon">
+  <router-link :to="`/${props.name}`" class="pokemon-card fadeIn">
     <div class="pokemon-card__image-container">
       <img width="170px" height="170px" :src="pokemonImage" />
     </div>
 
     <div class="pokemon-card__types">
-      <template v-for="pokemonType in pokemon.types" :key="pokemonType.slot">
-        <span class="pokemon-card__type">{{ pokemonType.type.name }}</span>
+      <template v-if="pokemon?.types">
+        <template v-for="pokemonType in pokemon.types" :key="pokemonType.slot">
+          <Badget>{{ pokemonType.type.name }}</Badget>
+        </template>
+      </template>
+
+      <template v-else>
+        <Badget>...</Badget>
       </template>
     </div>
 
-    <h2 class="pokemon-card__title">{{ pokemon.name }}</h2>
-    <span class="pokemon-card__weight">weight: {{ pokemon.weight }}</span>
+    <h2 class="pokemon-card__title">{{ name }}</h2>
+    <span class="pokemon-card__weight">weight: {{ pokemon?.weight }}</span>
   </router-link>
 </template>
 
@@ -19,11 +25,14 @@
 import type { Pokedex } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
+import { Badget } from "@/components";
 import { getPokemonByName } from "@/services";
 import { getOficialArtwork } from "@/utils";
+import { useTypeColor } from "@/composables";
 
 const props = defineProps<{ name: string }>();
 const pokemon = ref<Pokedex>();
+const cardBgColor = useTypeColor(pokemon);
 
 const pokemonImage = computed(() => {
   return pokemon.value ? getOficialArtwork(pokemon.value.sprites.front_default) : "";
@@ -38,7 +47,7 @@ onMounted(() => {
 
 <style scoped>
 .pokemon-card {
-  background-color: lightblue;
+  background-color: v-bind("cardBgColor");
   border-radius: 10px;
   padding: 2rem 1rem;
   display: flex;
@@ -46,6 +55,24 @@ onMounted(() => {
   align-items: center;
   text-decoration: none;
   color: black;
+  position: relative;
+  overflow: hidden;
+}
+
+.pokemon-card::after {
+  content: "";
+  position: absolute;
+  background-color: rgb(255, 255, 255, 0.35);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.pokemon-card > * {
+  position: relative;
+  z-index: 2;
 }
 
 .pokemon-card img {
@@ -86,15 +113,6 @@ onMounted(() => {
 .pokemon-card__types {
   display: flex;
   gap: 0.5rem;
-}
-
-.pokemon-card__type {
-  background-color: rgba(0, 0, 0, 0.08);
-  padding: 0.1rem 0.9rem;
-  border-radius: 100px;
-  text-transform: capitalize;
-  font-size: 0.8rem;
-  font-weight: 600;
 }
 
 .pokemon-card__weight {

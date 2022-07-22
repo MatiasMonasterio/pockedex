@@ -2,7 +2,7 @@
   <div class="navbar" :class="{ 'navbar--scroll': hasScrolled }">
     <div class="container">
       <router-link to="/" class="brand" :class="{ 'brand--scroll': hasScrolled }">
-        <img src="pokedex.svg" width="30px" height="30px" />
+        <img src="/pokedex.svg" width="30px" height="30px" />
         <p>Pokedex App</p>
       </router-link>
     </div>
@@ -21,8 +21,6 @@ const handleScroll = () => {
   } else if (hasScrolled.value && window?.scrollY <= props.scrollLimit) {
     hasScrolled.value = false;
   }
-
-  console.log(hasScrolled.value);
 };
 
 onMounted(() => document.addEventListener("scroll", handleScroll));

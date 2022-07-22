@@ -142,7 +142,8 @@ onMounted(() => {
 .profile__main {
   margin-bottom: 1rem;
   text-align: center;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
 

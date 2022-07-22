@@ -74,16 +74,19 @@ import type { Pokedex, FlavorTextEntryResponse } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useMeta } from "vue-meta";
 import Swal from "sweetalert2";
 
 import { Badget, Stat, MoveTable, VersionDescriptions } from "@/components";
 import { getPokemonByName, getPokemonDescription } from "@/services";
-import { getOficialArtwork } from "@/utils";
+import { getOficialArtwork, capitalize } from "@/utils";
 
 const router = useRouter();
 const { params } = useRoute();
 const pokemon = ref<Pokedex>();
 const descriptions = ref<FlavorTextEntryResponse[]>();
+
+useMeta({ title: capitalize(params.name as string) });
 
 const goBack = () => {
   router.push("/");

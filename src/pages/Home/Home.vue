@@ -22,11 +22,14 @@
 import type { Pokemon } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
+import { useMeta } from "vue-meta";
 import Swal from "sweetalert2";
 
 import { PokemonCard } from "@/components";
 import { getPokemons } from "@/services";
 import { POKEMON_LIMIT } from "@/config/constants";
+
+useMeta({ title: "Home" });
 
 const params = { offset: 0, limit: 20 };
 const pokemons = ref<Pokemon[]>([]);

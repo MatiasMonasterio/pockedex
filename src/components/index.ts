@@ -3,3 +3,4 @@ export { default as Stat } from "./Stat";
 
 export { default as PokemonCard } from "./PokemonCard";
 export { default as MoveTable } from "./MovesTable";
+export { default as VersionDescriptions } from "./VersionDescriptions";

@@ -1,5 +1,5 @@
-export const getOficialArtwork = (image: string): string => {
-  return image.replace("pokemon/", "pokemon/other/official-artwork/");
+export const getOficialArtwork = (id: number): string => {
+  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 };
 
 export const capitalize = (value: string): string => {

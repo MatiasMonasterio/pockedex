@@ -93,7 +93,7 @@ const goBack = () => {
 };
 
 const pokemonImage = computed(() => {
-  return pokemon.value ? getOficialArtwork(pokemon.value.sprites.front_default) : "";
+  return pokemon.value ? getOficialArtwork(pokemon.value.id) : "";
 });
 
 const getPokemon = async () => {

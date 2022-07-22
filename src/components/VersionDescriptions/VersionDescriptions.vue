@@ -49,8 +49,6 @@ onMounted(() => {
   getPokemonDescription(props.name).then((response) => {
     descriptions.value = response;
     descriptionActive.value = response[0].version.name;
-
-    console.log(descriptionActive.value);
   });
 });
 </script>

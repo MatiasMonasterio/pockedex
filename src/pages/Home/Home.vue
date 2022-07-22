@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-    <h1 class="home-title">Pokedex App</h1>
-
     <div class="pokemon-list">
       <template v-for="pokemon in pokemons" :key="pokemon.name">
         <PokemonCard :name="pokemon.name" />
@@ -65,10 +63,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.home-title {
-  text-align: center;
-  margin-bottom: 4rem;
-}
 .pokemon-list {
   display: grid;
   grid-auto-rows: auto;

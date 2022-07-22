@@ -1,19 +1,25 @@
 <template>
   <div class="container" v-if="pokemon">
-    <button class="go-back-btn" type="button" @click="goBack">Go Back</button>
-
     <div class="profile__container fadeIn">
-      <img :src="pokemonImage" width="250px" height="250px" />
-
       <div class="profile__info">
         <div class="profile__main">
-          <span class="profile__id"># {{ pokemon.id }}</span>
-          <h1 class="profile__title">{{ pokemon.name }}</h1>
+          <div>
+            <img :src="pokemonImage" width="350px" height="350px" />
+          </div>
 
-          <div class="profile__types">
-            <template v-for="pokemonType in pokemon.types" :key="pokemonType.slot">
-              <Badget :type="pokemonType.type.name">{{ pokemonType.type.name }}</Badget>
-            </template>
+          <div class="profile__descriptions">
+            <h1 class="profile__title">
+              <span>#{{ pokemon.id }}</span>
+              {{ pokemon.name }}
+            </h1>
+
+            <VersionDescriptions :name="pokemon.name" />
+
+            <div class="profile__types">
+              <template v-for="pokemonType in pokemon.types" :key="pokemonType.slot">
+                <Badget :type="pokemonType.type.name">{{ pokemonType.type.name }}</Badget>
+              </template>
+            </div>
           </div>
         </div>
 
@@ -39,7 +45,7 @@
             <p class="profile__details-row">
               <span> Abilities: </span>
               <span>
-                <template v-for="ability in pokemon.abilities" :key="ability.slot">
+                <template v-for="ability in pokemon.abilities.slice(0, 2)" :key="ability.slot">
                   <span class="ability">{{ ability.ability.name }}</span>
                 </template>
               </span>
@@ -64,19 +70,20 @@
 </template>
 
 <script setup lang="ts">
-import type { Pokedex } from "@/types";
+import type { Pokedex, FlavorTextEntryResponse } from "@/types";
 
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Swal from "sweetalert2";
 
-import { Badget, Stat, MoveTable } from "@/components";
-import { getPokemonByName } from "@/services";
+import { Badget, Stat, MoveTable, VersionDescriptions } from "@/components";
+import { getPokemonByName, getPokemonDescription } from "@/services";
 import { getOficialArtwork } from "@/utils";
 
 const router = useRouter();
 const { params } = useRoute();
 const pokemon = ref<Pokedex>();
+const descriptions = ref<FlavorTextEntryResponse[]>();
 
 const goBack = () => {
   router.push("/");
@@ -91,7 +98,10 @@ const getPokemon = async () => {
 
   try {
     const response = await getPokemonByName(pokemonName);
+    const descResponse = await getPokemonDescription(pokemonName);
+
     pokemon.value = response;
+    descriptions.value = descResponse;
   } catch (error) {
     console.error(error);
 
@@ -121,8 +131,8 @@ onMounted(() => {
 }
 
 .profile__container img {
-  width: 250px;
-  height: 250px;
+  width: 350px;
+  height: 350px;
 }
 
 .profile__info {
@@ -132,6 +142,13 @@ onMounted(() => {
 .profile__main {
   margin-bottom: 1rem;
   text-align: center;
+  display: flex;
+  gap: 2rem;
+}
+
+.profile__descriptions {
+  text-align: left;
+  font-size: 1.2rem;
 }
 
 .profile__data {
@@ -150,13 +167,20 @@ onMounted(() => {
 
 .profile__title {
   text-transform: capitalize;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.5rem;
   margin-top: 0.2rem;
+  font-weight: 500;
+  font-size: 3rem;
+  line-height: 3.5rem;
+}
+
+.profile__title span {
+  color: gray;
+  font-weight: 500;
 }
 
 .profile__types {
   display: flex;
-  justify-content: center;
   gap: 1rem;
 }
 
